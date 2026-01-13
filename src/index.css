@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Base styles - Dark aquarium theme
+ */
+@layer base {
+  body {
+    @apply bg-dark-900 text-gray-100 antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+}
+
+/**
+ * Component styles - Dark theme
+ */
+@layer components {
+  /* Section container */
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Buttons - Consistent styling */
+  .btn-primary {
+    @apply px-6 py-3 bg-ocean-600 text-white text-sm font-medium rounded-lg 
+           hover:bg-ocean-700 focus:outline-none focus:ring-2 focus:ring-ocean-500 
+           focus:ring-offset-2 focus:ring-offset-dark-800 transition-all 
+           shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-secondary {
+    @apply px-6 py-3 bg-dark-700 text-gray-100 text-sm font-medium rounded-lg border 
+           border-dark-600 hover:bg-dark-600 focus:outline-none focus:ring-2 
+           focus:ring-ocean-500 focus:ring-offset-2 focus:ring-offset-dark-800 
+           transition-all disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Input fields - Dark theme */
+  .input-field {
+    @apply block w-full px-4 py-2.5 bg-dark-800 border border-dark-600 
+           rounded-lg text-gray-100 placeholder-gray-400 shadow-sm 
+           focus:outline-none focus:ring-2 focus:ring-ocean-500 focus:border-ocean-500 
+           sm:text-sm transition-all;
+  }
+
+  /* Cards - Glass-morphism effect */
+  .card {
+    @apply bg-dark-800/80 backdrop-blur-sm rounded-xl border border-dark-600 
+           shadow-xl p-6;
+  }
+
+  /* Glass card variant */
+  .glass-card {
+    @apply bg-dark-800/60 backdrop-blur-md rounded-xl border border-dark-600/50 
+           shadow-2xl;
+  }
+}
