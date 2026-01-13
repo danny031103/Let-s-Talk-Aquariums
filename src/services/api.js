@@ -56,11 +56,46 @@ const apiRequest = async (endpoint, options = {}) => {
   };
 
   try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
-    const data = await response.json();
+    const fullUrl = `${API_BASE_URL}${endpoint}`;
+    console.log('[API Request]', 'Endpoint:', fullUrl);
+    
+    const response = await fetch(fullUrl, config);
+    
+    // Debug logging
+    console.log('[API Response]', 'Status:', response.status, response.statusText);
+    console.log('[API Response]', 'Headers:', Object.fromEntries(response.headers.entries()));
+    
+    // Handle non-JSON responses
+    const contentType = response.headers.get('content-type');
+    let data;
+    
+    // Read response text once (can only be consumed once)
+    const responseText = await response.text();
+    console.log('[API Response]', 'Raw text length:', responseText.length, 'characters');
+    
+    if (contentType && contentType.includes('application/json')) {
+      try {
+        if (!responseText || responseText.trim().length === 0) {
+          console.warn('[API Response]', 'Empty response body');
+          throw new Error('Empty JSON response');
+        }
+        
+        data = JSON.parse(responseText);
+        console.log('[API Response]', 'Parsed JSON:', data);
+      } catch (parseError) {
+        console.error('[API Response]', 'JSON parse error:', parseError);
+        console.error('[API Response]', 'Raw response text:', responseText);
+        throw new Error(`Invalid JSON response: ${parseError.message}`);
+      }
+    } else {
+      console.warn('[API Response]', 'Non-JSON response. Content-Type:', contentType);
+      console.warn('[API Response]', 'Raw text:', responseText);
+      throw new Error(responseText || 'API request failed - non-JSON response');
+    }
 
     if (!response.ok) {
       // Preserve error details for proper error handling
+      console.error('[API Error]', 'Request failed:', response.status, data);
       const error = new Error(data.error || data.message || 'API request failed');
       error.status = response.status;
       error.data = data;
@@ -69,7 +104,7 @@ const apiRequest = async (endpoint, options = {}) => {
 
     return data;
   } catch (error) {
-    console.error('API request error:', error);
+    console.error('[API Request Error]', 'Endpoint:', endpoint, 'Error:', error);
     throw error;
   }
 };
@@ -194,11 +229,24 @@ export const profileAPI = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Upload failed');
+      const contentType = response.headers.get('content-type');
+      let error;
+      if (contentType && contentType.includes('application/json')) {
+        error = await response.json();
+      } else {
+        const text = await response.text();
+        throw new Error(text || 'Upload failed');
+      }
+      throw new Error(error.message || error.error || 'Upload failed');
     }
 
-    return await response.json();
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      return await response.json();
+    } else {
+      const text = await response.text();
+      throw new Error('Invalid response format');
+    }
   },
 };
 
@@ -261,11 +309,24 @@ export const mediaAPI = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Upload failed');
+      const contentType = response.headers.get('content-type');
+      let error;
+      if (contentType && contentType.includes('application/json')) {
+        error = await response.json();
+      } else {
+        const text = await response.text();
+        throw new Error(text || 'Upload failed');
+      }
+      throw new Error(error.message || error.error || 'Upload failed');
     }
 
-    return await response.json();
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      return await response.json();
+    } else {
+      const text = await response.text();
+      throw new Error('Invalid response format');
+    }
   },
 };
 
