@@ -31,23 +31,25 @@ const JWT_SECRET = process.env.JWT_SECRET || 'change-me-in-production';
 const AI_ENABLED = process.env.AI_ENABLED === 'true';
 
 // Configure CORS for production
-const corsOptions = {
-  origin: FRONTEND_URL,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-};
+const allowedOrigins = [
+  'http://localhost:3001',
+  'https://let-s-talk-aquariums.vercel.app',
+  'https://let-s-talk-aquariums-br4y1g9qd-daniel-britos-projects-6952ab2b.vercel.app'
+];
 
 const io = socketIo(server, {
   cors: {
-    origin: FRONTEND_URL,
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true
   }
 });
 
 // Middleware
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 app.use(express.json());
 
 // Serve static files from public directory
@@ -1202,19 +1204,21 @@ Important rules:
 // ERROR HANDLING MIDDLEWARE
 // ============================================================================
 
-// Error handling middleware (must be after routes)
-app.use((err, req, res, next) => {
-  console.error('Error:', err);
-  res.status(err.status || 500).json({
-    error: process.env.NODE_ENV === 'production' 
-      ? 'Internal server error' 
-      : err.message
-  });
-});
-
-// 404 handler
+// 404 handler (must be after all routes, before error handler)
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found' });
+});
+
+// Global error handler (must be last)
+app.use((err, req, res, next) => {
+  console.error('Backend error:', err);
+  const status = err.status || err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+  
+  res.status(status).json({ 
+    error: message,
+    ...(process.env.NODE_ENV !== 'production' && { stack: err.stack })
+  });
 });
 
 // ============================================================================
