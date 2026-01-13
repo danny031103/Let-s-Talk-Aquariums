@@ -13,9 +13,10 @@
  * Uses JWT tokens stored in localStorage for authentication
  */
 
-// API Base URL - adjust if your backend runs on a different port
-// In production, configure this via Webpack DefinePlugin or build-time environment variables
-const API_BASE_URL = 'http://localhost:3000/api';
+// API Base URL - configured via environment variable
+const API_BASE_URL = process.env.REACT_APP_API_URL 
+  ? `${process.env.REACT_APP_API_URL}/api`
+  : 'http://localhost:3000/api';
 
 /**
  * Get authentication token from localStorage

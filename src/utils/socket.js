@@ -7,9 +7,8 @@
 
 import { io } from 'socket.io-client';
 
-// Server URL - adjust if your backend runs on a different port
-// Note: process.env is not available in browser, using hardcoded value for MVP
-const SERVER_URL = 'http://localhost:3000';
+// Server URL - configured via environment variable
+const SERVER_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
 /**
  * Create and configure a Socket.IO connection
