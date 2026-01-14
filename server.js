@@ -30,16 +30,51 @@ const MONGODB_URI = process.env.MONGODB_URI;
 const JWT_SECRET = process.env.JWT_SECRET || 'change-me-in-production';
 const AI_ENABLED = process.env.AI_ENABLED === 'true';
 
-// Configure CORS for production
+// Configure CORS for local development and Vercel deployments
+// This array includes static origins and a RegExp for dynamic Vercel preview URLs
 const allowedOrigins = [
-  'http://localhost:3001',
-  'https://let-s-talk-aquariums.vercel.app',
-  'https://let-s-talk-aquariums-br4y1g9qd-daniel-britos-projects-6952ab2b.vercel.app'
+  'http://localhost:3001', // Local development
+  'https://let-s-talk-aquariums.vercel.app', // Main production URL
+  /^https:\/\/.*\.vercel\.app$/, // RegExp to match all Vercel preview URLs (e.g., *.vercel.app)
 ];
+
+/**
+ * CORS origin validation function
+ * 
+ * This function allows:
+ * - Missing origins (server-to-server requests)
+ * - Exact string matches from allowedOrigins
+ * - RegExp matches from allowedOrigins (for dynamic Vercel preview URLs)
+ * 
+ * This approach eliminates the need to hardcode individual preview URLs,
+ * as any current or future Vercel preview URL will automatically be allowed.
+ */
+const corsOriginHandler = (origin, callback) => {
+  // Allow requests with no origin (e.g., mobile apps, Postman, server-to-server)
+  if (!origin) {
+    return callback(null, true);
+  }
+
+  // Check if origin matches any allowed origin (string or RegExp)
+  const isAllowed = allowedOrigins.some(allowedOrigin => {
+    if (typeof allowedOrigin === 'string') {
+      return origin === allowedOrigin;
+    } else if (allowedOrigin instanceof RegExp) {
+      return allowedOrigin.test(origin);
+    }
+    return false;
+  });
+
+  if (isAllowed) {
+    callback(null, true);
+  } else {
+    callback(new Error('Not allowed by CORS'));
+  }
+};
 
 const io = socketIo(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: corsOriginHandler,
     methods: ["GET", "POST"],
     credentials: true
   }
@@ -47,7 +82,7 @@ const io = socketIo(server, {
 
 // Middleware
 app.use(cors({
-  origin: allowedOrigins,
+  origin: corsOriginHandler,
   credentials: true
 }));
 app.use(express.json());
