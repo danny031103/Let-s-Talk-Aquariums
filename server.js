@@ -11,6 +11,7 @@
 // Load environment variables
 require('dotenv').config();
 
+const path = require('path');
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -87,8 +88,9 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Serve static files from public directory
-app.use(express.static('public'));
+// Serve static files from public directory using absolute path
+// This ensures the public folder is found correctly in both local and production environments
+app.use(express.static(path.join(__dirname, 'public')));
 
 // ============================================================================
 // CONFIGURATION & CONSTANTS
