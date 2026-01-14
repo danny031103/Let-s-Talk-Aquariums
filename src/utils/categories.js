@@ -7,16 +7,14 @@
  * - Step 3: Further subcategories appear dynamically
  */
 
-import categoryImages from '../assets/images/categories';
-
 export const CATEGORIES = {
   saltwater: {
     name: 'Saltwater',
-    image: categoryImages.saltwater.main,
+    image: '/images/categories/saltwater/saltwater.jpeg',
     subcategories: {
       coral: {
         name: 'Coral',
-        image: categoryImages.coral.main,
+        image: '/images/categories/coral/coral.jpeg',
         items: [
           { name: 'SPS Coral', image: '/images/categories/coral/sps.png' },
           { name: 'LPS Coral', image: '/images/categories/coral/lps.png' },
@@ -26,7 +24,7 @@ export const CATEGORIES = {
       },
       macroalgae: {
         name: 'Macroalgae',
-        image: categoryImages.plants.main,
+        image: '/images/categories/plants/plants.jpeg',
         items: [
           { name: 'Chaetomorpha', image: '/images/categories/plants/chaeto.png' },
           { name: 'Caulerpa', image: '/images/categories/plants/caulerpa.png' },
@@ -35,7 +33,7 @@ export const CATEGORIES = {
       },
       reefTanks: {
         name: 'Reef Tanks',
-        image: categoryImages.coral.reef,
+        image: '/images/categories/coral/coralpic.jpeg',
         items: [
           { name: 'Nano Reef', image: '/images/categories/coral/nano.png' },
           { name: 'Large Reef', image: '/images/categories/coral/large.png' },
@@ -44,7 +42,7 @@ export const CATEGORIES = {
       },
       fish: {
         name: 'Fish (Saltwater)',
-        image: categoryImages.fish.saltwater,
+        image: '/images/categories/fish/saltwater/saltwaterfish.jpeg',
         items: [
           { name: 'Clownfish', image: '/images/categories/fish/saltwater/clownfish.png' },
           { name: 'Tang', image: '/images/categories/fish/saltwater/tang.png' },
@@ -82,11 +80,11 @@ export const CATEGORIES = {
   },
   freshwater: {
     name: 'Freshwater',
-    image: categoryImages.freshwater.main,
+    image: '/images/categories/freshwater/freshwateraquarium.jpeg',
     subcategories: {
       plants: {
         name: 'Plants',
-        image: categoryImages.plants.main,
+        image: '/images/categories/plants/plants.jpeg',
         items: [
           { name: 'Java Fern', image: '/images/categories/plants/java-fern.png' },
           { name: 'Anubias', image: '/images/categories/plants/anubias.png' },
@@ -96,7 +94,7 @@ export const CATEGORIES = {
       },
       fish: {
         name: 'Fish (Freshwater)',
-        image: categoryImages.fish.freshwater,
+        image: '/images/categories/fish/freshwater/freshwaterfish.jpeg',
         items: [
           { name: 'Betta', image: '/images/categories/fish/freshwater/betta.png' },
           { name: 'Tetra', image: '/images/categories/fish/freshwater/tetra.png' },
@@ -106,7 +104,7 @@ export const CATEGORIES = {
       },
       aquascapes: {
         name: 'Aquascapes',
-        image: categoryImages.freshwater.main,
+        image: '/images/categories/freshwater/freshwateraquarium.jpeg',
         items: [
           { name: 'Nature Style', image: '/images/categories/nature-style.png' },
           { name: 'Dutch Style', image: '/images/categories/dutch-style.png' },
