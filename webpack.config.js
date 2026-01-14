@@ -28,6 +28,13 @@ module.exports = {
           'css-loader',
           'postcss-loader' // Add PostCSS loader for Tailwind
         ]
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'images/[hash][ext][query]'
+        }
       }
     ]
   },
